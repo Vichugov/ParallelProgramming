@@ -4,7 +4,6 @@
 using namespace std;
 
 int size;
-int **matrix;
 
 void ShowMatrix(double **matrix, double *rightnum)
 {
@@ -40,8 +39,6 @@ void GenerateSLAU(double **matrix, double *rightnum)
             rightnum[a] += matrix[a][b] * solutions[b];
         }
     }
-
-    ShowMatrix(matrix, solutions);
 }
 
 
@@ -57,7 +54,6 @@ void SolveSLAU(double **matrix, double *rightnum)
                 matrix[b][c] += matrix[a][c] * multiplier * -1;
             }
             rightnum[b] += rightnum[a] * multiplier * -1;
-            ShowMatrix(matrix, rightnum);
         }
     }
 
@@ -73,18 +69,15 @@ void SolveSLAU(double **matrix, double *rightnum)
         solutions[a] = sum / matrix[a][a];
     }
 
-    ShowMatrix(matrix, solutions);
 }
 
 
 int main()
 {
-    size = 10;
+    size = 2000;
     double **matrix = new double*[size];
     double *rightnum = new double[size];
 
     GenerateSLAU(matrix, rightnum);
-    ShowMatrix(matrix, rightnum);
     SolveSLAU(matrix, rightnum);
-    ShowMatrix(matrix, rightnum);
 }
