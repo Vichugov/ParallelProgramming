@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdlib>
+#include<chrono>
 
 using namespace std;
 
@@ -240,20 +241,41 @@ void BlockStep(int** fmatrix, int** smatrix, int** rmatrix, int msize)
 }
 
 
+bool TestResult(int** fresult, int** sresult, int rsize)
+{
+	bool norma = true;
+	for (int a = 0; a < rsize; ++a)
+	{
+		for (int b = 0; b < rsize; ++b)
+		{
+			if (fresult[a][b] != sresult[a][b])
+			{
+				norma = false;
+			}
+		}
+	}
+	return norma;
+}
+
+
 int main()
 {
-	int size = 4;
+	int size = 256;
 	int** amatrix = new int*[size];
 	int** bmatrix = new int*[size];
 	CreateMatrix(amatrix, bmatrix, size);
-	ShowMatrix(amatrix, size);
-	ShowMatrix(bmatrix, size);
 
+	int** tmatrix = CreateEmptyMatrix(size);
 	int** rmatrix = CreateEmptyMatrix(size);
 
+	chrono::steady_clock::time_point start = chrono::steady_clock::now();
 	BlockStep(amatrix, bmatrix, rmatrix, size);
-	//MultipleMatrix(amatrix, bmatrix, rmatrix, size);
-	ShowMatrix(rmatrix, size);
+	chrono::steady_clock::time_point finish = chrono::steady_clock::now();
+	chrono::milliseconds calculatetime = chrono::duration_cast<chrono::milliseconds>(finish - start);
+	MultipleMatrix(amatrix, bmatrix, tmatrix, size);
+
+	cout << "Time of running: " << calculatetime.count() << endl;
+	cout << TestResult(rmatrix, tmatrix, size) << endl;
 
 
 	return 0;
